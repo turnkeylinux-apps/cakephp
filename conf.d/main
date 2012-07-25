@@ -14,3 +14,10 @@ rm $SRC/cakephp-*.zip
 chown -R root:root $WEBROOT
 chown -R www-data:www-data $WEBROOT/app/tmp
 
+# tweak configuration
+CONF=$WEBROOT/app/Config/core.php
+sed -i "s|Security.salt.*|Security.salt', '$(mcookie)');|" $CONF
+sed -i "s|Security.cipherSeed.*|Security.cipherSeed', '$(mcookie)');|" $CONF
+chown www-data:www-data $CONF
+chmod 640 $CONF
+
