@@ -56,3 +56,11 @@ a2dissite default
 a2ensite cakephp
 a2enmod rewrite
 
+# setup tkl-webcp
+mv /var/www/js/* $WEBROOT/app/webroot/js/; rm -rf /var/www/js
+mv /var/www/css/* $WEBROOT/app/webroot/css/; rm -rf /var/www/css
+mv /var/www/images $WEBROOT/app/webroot
+
+cp -TdR $SRC/cakephp.overlay $WEBROOT
+rm -rf $SRC/cakephp.overlay
+
