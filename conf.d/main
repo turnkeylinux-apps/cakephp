@@ -1,0 +1,9 @@
+#!/bin/sh -ex
+
+DB_NAME=cakephp
+DB_USER=cakephp
+DB_PASS=$(mcookie)
+
+SRC=/usr/local/src
+WEBROOT=/var/www/cakephp
+
