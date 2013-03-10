@@ -8,9 +8,9 @@ SRC=/usr/local/src
 WEBROOT=/var/www/cakephp
 
 # unpack and set permissions
-unzip $SRC/cakephp-*.zip -d $(dirname $WEBROOT)
+tar -zxf $SRC/cakephp.tar.gz -C $(dirname $WEBROOT)
 mv $(dirname $WEBROOT)/cakephp-* $WEBROOT
-rm $SRC/cakephp-*.zip
+rm $SRC/cakephp.tar.gz
 chown -R root:root $WEBROOT
 chown -R www-data:www-data $WEBROOT/app/tmp
 
