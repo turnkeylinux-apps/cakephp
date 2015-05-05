@@ -1,8 +1,8 @@
 #!/bin/bash -ex
 
-VERSION="2.3.1"
-URL="https://github.com/cakephp/cakephp/tarball/$VERSION"
+VERSION="3.0.3"
+URL="https://github.com/cakephp/cakephp/releases/download/$VERSION/cakephp-$(echo $VERSION | sed 's/\./-/g').zip"
 
 [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
-curl -L -f $PROXY $URL -o /usr/local/src/cakephp.tar.gz
+curl -L -f $PROXY $URL -o /usr/local/src/cakephp.zip
 
