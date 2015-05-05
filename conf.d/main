@@ -8,40 +8,31 @@ SRC=/usr/local/src
 WEBROOT=/var/www/cakephp
 
 # unpack and set permissions
-tar -zxf $SRC/cakephp.tar.gz -C $(dirname $WEBROOT)
-mv $(dirname $WEBROOT)/cakephp-* $WEBROOT
-rm $SRC/cakephp.tar.gz
+mkdir -p $WEBROOT
+unzip -d $WEBROOT $SRC/cakephp.zip
+rm $SRC/cakephp.zip
 chown -R root:root $WEBROOT
-chown -R www-data:www-data $WEBROOT/app/tmp
+chown -R www-data:www-data $WEBROOT/tmp
 
 # tweak configuration
-CONF=$WEBROOT/app/Config/core.php
-sed -i "s|Security.salt.*|Security.salt', '$(mcookie)');|" $CONF
-sed -i "s|Security.cipherSeed.*|Security.cipherSeed', '$(mcookie)');|" $CONF
+CONF=$WEBROOT/config/app.php
+
+sed -i "\
+    s#\\('salt' => \\)'.\\+'#\\1'$(mcookie)'#; \
+    /Datasources/,/        \\],/{ \
+        s#\\('username' => \\)'.*'#\\1'cakephp'#; \
+        s#\\('database' => \\)'.*'#\\1'cakephp'#; \
+        s#\\('password' => \\)'.*'#\\1'$DB_PASS'# \
+    }; \
+    /EmailTransport/,/    \\]/ \
+        s#\\('className' => \\)'Mail'#\\1'Smtp'# \
+" $CONF
+
 chown www-data:www-data $CONF
 chmod 640 $CONF
 
 # setup the database
 /etc/init.d/mysql start
-
-CONF=$WEBROOT/app/Config/database.php
-cat >$CONF<<EOF
-<?php
-class DATABASE_CONFIG {
-        public \$default = array(
-                'datasource' => 'Database/Mysql',
-                'persistent' => false,
-                'host' => 'localhost',
-                'login' => '$DB_USER',
-                'password' => '$DB_PASS',
-                'database' => '$DB_NAME',
-                'prefix' => '',
-                'encoding' => 'utf8',
-        );
-}
-EOF
-chown www-data:www-data $CONF
-chmod 640 $CONF
 
 MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
 MYSQL_ADMIN="mysqladmin --user=root --password=$MYSQL_PASS"
@@ -57,9 +48,11 @@ a2ensite cakephp
 a2enmod rewrite
 
 # setup tkl-webcp
-mv /var/www/js/* $WEBROOT/app/webroot/js/; rm -rf /var/www/js
-mv /var/www/css/* $WEBROOT/app/webroot/css/; rm -rf /var/www/css
-mv /var/www/images $WEBROOT/app/webroot
+mv /var/www/js/* $WEBROOT/webroot/js/; rm -rf /var/www/js
+mv /var/www/css/* $WEBROOT/webroot/css/; rm -rf /var/www/css
+mv /var/www/images/* $WEBROOT/webroot/img/; rm -rf /var/www/images
+
+ln -s $WEBROOT/webroot/img $WEBROOT/webroot/images
 
 cp -TdR $SRC/cakephp.overlay $WEBROOT
 rm -rf $SRC/cakephp.overlay
