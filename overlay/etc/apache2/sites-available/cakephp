@@ -4,17 +4,17 @@ NameVirtualHost *:443
 <VirtualHost *:80>
     UseCanonicalName Off
     ServerAdmin webmaster@localhost
-    DocumentRoot /var/www/cakephp/app/webroot/
+    DocumentRoot /var/www/cakephp/webroot/
 </VirtualHost>
 
 <VirtualHost *:443>
     SSLEngine on
     SSLCertificateFile /etc/ssl/certs/cert.pem
     ServerAdmin webmaster@localhost
-    DocumentRoot /var/www/cakephp/app/webroot/
+    DocumentRoot /var/www/cakephp/webroot/
 </VirtualHost>
 
-<Directory /var/www/cakephp/app/webroot/>
+<Directory /var/www/cakephp/webroot/>
     Options +FollowSymLinks
     AllowOverride All
     order allow,deny
