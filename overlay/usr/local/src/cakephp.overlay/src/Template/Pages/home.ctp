@@ -15,10 +15,15 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+use Cake\Cache\Cache;
+use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
+use Cake\Error\Debugger;
+use Cake\Validation\Validation;
+
 if (Configure::read('debug') == 0):
 	throw new NotFoundException();
 endif;
-App::uses('Debugger', 'Utility');
 ?>
 
 <h1>TurnKey CakePHP</h1>
@@ -40,12 +45,12 @@ App::uses('Debugger', 'Utility');
             <div>
                 <a href="https://<?php print
                 $_SERVER{'HTTP_HOST'}; ?>:12321"><img
-                src="images/webmin.png"/>Webmin</a>
+                src="img/webmin.png"/>Webmin</a>
             </div>
             <div>
                 <a href="https://<?php print
                 $_SERVER{'HTTP_HOST'}; ?>:12322"><img
-                src="images/phpmyadmin.png"/>PHPMyAdmin</a>
+                src="img/phpmyadmin.png"/>PHPMyAdmin</a>
             </div>
             <div></div>
             <div></div>
@@ -59,10 +64,10 @@ App::uses('Debugger', 'Utility');
                     CakePHP website</a>,
                     <a href="http://book.cakephp.org">
                     documentation</a> and 
-                    <a href="http://api20.cakephp.org">
+                    <a href="http://api.cakephp.org/3.0/">
                     API</a>
                 </li>
-                <li><a href="http://book.cakephp.org/2.0/en/tutorials-and-examples/blog/blog.html">
+                <li><a href="http://book.cakephp.org/3.0/en/tutorials-and-examples/blog/blog.html">
                 CakePHP 15 minute blog tutorial</a></li>
                 <li><a href="http://www.turnkeylinux.org/cakephp">
                 TurnKey CakePHP release notes</a></li>
@@ -75,44 +80,44 @@ App::uses('Debugger', 'Utility');
             <br/>
 
             <h3>Routing configuration</h3>
-            <pre>/var/www/cakephp/app/Config/routes.php</pre>
+            <pre>/var/www/cakephp/config/routes.php</pre>
 
             <h3>View Layout</h3>
-            <pre>/var/www/cakephp/app/View/Layouts/default.ctp</pre>
+            <pre>/var/www/cakephp/src/Template/Layout/default.ctp</pre>
 
             <h3>View Page</h3>
-            <pre>/var/www/cakephp/app/View/Pages/home.ctp</pre>
+            <pre>/var/www/cakephp/src/Template/Pages/home.ctp</pre>
     
             <h3>Webroot (css, js, images)</h3>
-            <pre>/var/www/cakephp/app/webroot/</pre>
+            <pre>/var/www/cakephp/webroot/</pre>
 
             <br/>
             <h3>And the cherry: MySQL preconfigured to get you started</h3>
-            <pre>/var/www/cakephp/app/Config/database.php</pre>
+            <pre>/var/www/cakephp/config/app.php</pre>
         </div>
     </div>
     <div id="checks">
         <div class="fragment-content">
 
         <?php
-        if (Configure::read('debug') > 0):
+        if (Configure::read('debug')):
             Debugger::checkSecurityKeys();
         endif;
         ?>
         <p id="url-rewriting-warning" style="background-color:#e32; color:#fff;">
         <?php echo __d('cake_dev', 'URL rewriting is not properly configured on your server.'); ?>
-            1) <a target="_blank" href="http://book.cakephp.org/2.0/en/installation/advanced-installation.html#apache-and-mod-rewrite-and-htaccess" style="color:#fff;">Help me configure it</a>
-            2) <a target="_blank" href="http://book.cakephp.org/2.0/en/development/configuration.html#cakephp-core-configuration" style="color:#fff;">I don't / can't use URL rewriting</a>
+            1) <a target="_blank" href="http://book.cakephp.org/3.0/en/installation/advanced-installation.html#apache-and-mod-rewrite-and-htaccess" style="color:#fff;">Help me configure it</a>
+            2) <a target="_blank" href="http://book.cakephp.org/3.0/en/development/configuration.html#cakephp-core-configuration" style="color:#fff;">I don't / can't use URL rewriting</a>
         </p>
         <p>
         <?php
-            if (version_compare(PHP_VERSION, '5.2.8', '>=')):
+            if (version_compare(PHP_VERSION, '5.4.16', '>=')):
                 echo '<span class="notice success">';
-                    echo __d('cake_dev', 'Your version of PHP is 5.2.8 or higher.');
+                    echo __d('cake_dev', 'Your version of PHP is 5.4.16 or higher.');
                 echo '</span>';
             else:
                 echo '<span class="notice">';
-                    echo __d('cake_dev', 'Your version of PHP is too low. You need PHP 5.2.8 or higher to use CakePHP.');
+                    echo __d('cake_dev', 'Your version of PHP is too low. You need PHP 5.4.16 or higher to use CakePHP.');
                 echo '</span>';
             endif;
         ?>
@@ -132,62 +137,36 @@ App::uses('Debugger', 'Utility');
         </p>
         <p>
             <?php
-                $settings = Cache::settings();
-                if (!empty($settings)):
-                    echo '<span class="notice success">';
-                        echo __d('cake_dev', 'The %s is being used for core caching. To change the config edit APP/Config/core.php ', '<em>'. $settings['engine'] . 'Engine</em>');
-                    echo '</span>';
-                else:
-                    echo '<span class="notice">';
-                        echo __d('cake_dev', 'Your cache is NOT working. Please check the settings in APP/Config/core.php');
-                    echo '</span>';
-                endif;
-            ?>
+                $settings = Cache::config('_cake_core_');
+                if (!empty($settings)): ?>
+                    <span class="notice success">The <em><?= $settings['className'] ?>Engine</em> is being used for core caching. To change the config edit /var/www/cakephp/config/app.php</span>
+                <?php else: ?>
+                    <span class="notice">Your cache is NOT working. Please check the settings in /var/www/cakephp/config/app.php</span>
+                <?php endif; ?>
         </p>
         <p>
-            <?php
-                $filePresent = null;
-                if (file_exists(APP . 'Config' . DS . 'database.php')):
-                    echo '<span class="notice success">';
-                        echo __d('cake_dev', 'Your database configuration file is present.');
-                        $filePresent = true;
-                    echo '</span>';
-                else:
-                    echo '<span class="notice">';
-                        echo __d('cake_dev', 'Your database configuration file is NOT present.');
-                        echo '<br/>';
-                        echo __d('cake_dev', 'Rename APP/Config/database.php.default to APP/Config/database.php');
-                    echo '</span>';
-                endif;
-            ?>
+           <?php
+               try {
+                   $connection = ConnectionManager::get('default');
+                   $connected = $connection->connect();
+               } catch (Exception $connectionError) {
+                   $connected = false;
+                   $errorMsg = $connectionError->getMessage();
+                   if (method_exists($connectionError, 'getAttributes')):
+                       $attributes = $connectionError->getAttributes();
+                       if (isset($errorMsg['message'])):
+                           $errorMsg .= '<br />' . $attributes['message'];
+                       endif;
+                   endif;
+               }
+           ?>
+           <?php if ($connected): ?>
+               <span class="notice success">CakePHP is able to connect to the database.</span>
+           <?php else: ?>
+               <span class="notice">CakePHP is NOT able to connect to the database.<br /><br /><?= $errorMsg ?></span>
+           <?php endif; ?>
         </p>
         <?php
-        if (isset($filePresent)):
-            App::uses('ConnectionManager', 'Model');
-            try {
-                $connected = ConnectionManager::getDataSource('default');
-            } catch (Exception $connectionError) {
-                $connected = false;
-            }
-        ?>
-        <p>
-            <?php
-                if ($connected && $connected->isConnected()):
-                    echo '<span class="notice success">';
-                        echo __d('cake_dev', 'Cake is able to connect to the database.');
-                    echo '</span>';
-                else:
-                    echo '<span class="notice">';
-                        echo __d('cake_dev', 'Cake is NOT able to connect to the database.');
-                        echo '<br /><br />';
-                        echo $connectionError->getMessage();
-                    echo '</span>';
-                endif;
-            ?>
-        </p>
-        <?php endif;?>
-        <?php
-            App::uses('Validation', 'Utility');
             if (!Validation::alphaNumeric('cakephp')) {
                 echo '<p><span class="notice">';
                     echo __d('cake_dev', 'PCRE has not been compiled with Unicode support.');
@@ -198,5 +177,4 @@ App::uses('Debugger', 'Utility');
         ?>
         </div>
     </div>
-
 </div>
