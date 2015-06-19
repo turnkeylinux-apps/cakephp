@@ -17,7 +17,7 @@ and on top of that:
 - Includes TurnKey Web Control panel with links to useful references,
   relevant path information, and CakePHP checks (convenience).
 - SSL support out of the box.
-- `PHPMyAdmin`_ administration frontend for MySQL (listening on port
+- `Adminer`_ administration frontend for MySQL (listening on port
   12322 - uses SSL).
 - Postfix MTA (bound to localhost) to allow sending of email (e.g.,
   password recovery).
@@ -31,4 +31,4 @@ Credentials *(passwords set at first boot)*
 
 .. _CakePHP: http://cakephp.org/
 .. _TurnKey Core: http://www.turnkeylinux.org/core
-.. _PHPMyAdmin: http://www.phpmyadmin.net
+.. _Adminer: http://www.adminer.org/
