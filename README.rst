@@ -30,5 +30,5 @@ Credentials *(passwords set at first boot)*
 
 
 .. _CakePHP: http://cakephp.org/
-.. _TurnKey Core: http://www.turnkeylinux.org/core
+.. _TurnKey Core: https://www.turnkeylinux.org/core
 .. _Adminer: http://www.adminer.org/
