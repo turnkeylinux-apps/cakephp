@@ -69,7 +69,7 @@ endif;
                 </li>
                 <li><a href="http://book.cakephp.org/3.0/en/tutorials-and-examples/blog/blog.html">
                 CakePHP 15 minute blog tutorial</a></li>
-                <li><a href="http://www.turnkeylinux.org/cakephp">
+                <li><a href="https://www.turnkeylinux.org/cakephp">
                 TurnKey CakePHP release notes</a></li>
             </ul>
         </div>
