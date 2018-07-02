@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-VERSION="3.5.11"
+VERSION="3.6.6"
 URL="https://github.com/cakephp/cakephp/releases/download/$VERSION/cakephp-$(echo $VERSION | sed 's/\./-/g').zip"
 
 [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
