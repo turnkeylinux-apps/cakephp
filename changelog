@@ -1,6 +1,6 @@
 turnkey-cakephp-15.0 (1) turnkey; urgency=low
 
-  * Latest upstream version of CakePHP (v3.5.11)
+  * Latest upstream version of CakePHP (v3.6.6)
 
   * Install Adminer directly from stretch/main repo
 
@@ -9,7 +9,7 @@ turnkey-cakephp-15.0 (1) turnkey; urgency=low
   * Note: Please refer to turnkey-core's changelog for changes common to all
     appliances. Here we only describe changes specdific to this appliance.
 
- -- Vlad Kuzmenko <vlad.work.here@gmail.com>  Mon, 29 Jan 2018 21:34:42 +0200
+ -- Stefan Davis <stefan@turnkeylinux.org>  Tue, 03 Jul 2018 09:46:54 +1000
 
 turnkey-cakephp-14.2 (1) turnkey; urgency=low
 
