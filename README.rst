@@ -14,6 +14,10 @@ and on top of that:
    
    - Installed from upstream source code to /var/www/cakephp
 
+     **Security note**: Updates to CakePHP may require supervision so
+     they **ARE NOT** configured to install automatically. See `CakePHP
+     documentation`_ for upgrading.
+
 - Includes TurnKey Web Control panel with links to useful references,
   relevant path information, and CakePHP checks (convenience).
 - SSL support out of the box.
@@ -30,6 +34,7 @@ Credentials *(passwords set at first boot)*
 -  Adminer: username **adminer**
 
 
-.. _CakePHP: http://cakephp.org/
+.. _CakePHP: https://cakephp.org/
 .. _TurnKey Core: https://www.turnkeylinux.org/core
-.. _Adminer: http://www.adminer.org/
+.. _CakePHP documentation: https://book.cakephp.org/3.0/en/upgrade-tool.html
+.. _Adminer: https://www.adminer.org/
