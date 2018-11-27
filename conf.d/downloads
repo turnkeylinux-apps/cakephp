@@ -8,7 +8,7 @@ dl() {
 GH_API=https://api.github.com/repos/cakephp/cakephp/releases       
 VERSION=$(curl -s $GH_API |grep -oP '"tag_name": "\K(.*)(?=")' | grep -iv beta \
     | grep -iv rc | sort --version-sort | tail -1)
-FILENAME="cakephp-$(echo $VERSION | sed 's|.|-|g').zip"
+FILENAME="cakephp-$(echo $VERSION | sed 's|\.|-|g').zip"
 
 URL="https://github.com/cakephp/cakephp/releases/download/$VERSION/$FILENAME"
 
