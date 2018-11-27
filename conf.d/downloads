@@ -1,8 +1,15 @@
 #!/bin/bash -ex
 
-VERSION="3.6.6"
-URL="https://github.com/cakephp/cakephp/releases/download/$VERSION/cakephp-$(echo $VERSION | sed 's/\./-/g').zip"
+dl() {
+    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
+    cd $2; curl -L -f -O $PROXY $1; cd -
+}
 
-[ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
-curl -L -f $PROXY $URL -o /usr/local/src/cakephp.zip
+GH_API=https://api.github.com/repos/cakephp/cakephp/releases       
+VERSION=$(curl -s $GH_API |grep -oP '"tag_name": "\K(.*)(?=")' | grep -iv beta \
+    | grep -iv rc | sort --version-sort | tail -1)
+FILENAME="cakephp-$(echo $VERSION | sed 's|.|-|g').zip"
 
+URL="https://github.com/cakephp/cakephp/releases/download/$VERSION/$FILENAME"
+
+dl $URL /usr/local/src

@@ -1,3 +1,14 @@
+turnkey-cakephp-15.1 (1) turnkey; urgency=low
+
+  * Latest upstream version of CakePHP (v3.6.13)
+
+  * Refactor download script to always download latest stable.
+
+  * Rebuild to resolve inadvertant removal of mariadb during sec-updates
+    - part of #1246. 
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Tue, 27 Nov 2018 17:09:40 +1100
+
 turnkey-cakephp-15.0 (1) turnkey; urgency=low
 
   * Latest upstream version of CakePHP (v3.6.6)

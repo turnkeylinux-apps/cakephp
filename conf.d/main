@@ -9,8 +9,8 @@ WEBROOT=/var/www/cakephp
 
 # unpack and set permissions
 mkdir -p $WEBROOT
-unzip -d $WEBROOT $SRC/cakephp.zip
-rm $SRC/cakephp.zip
+unzip -d $WEBROOT $SRC/cakephp*.zip
+rm $SRC/cakephp*.zip
 chown -R root:root $WEBROOT
 chown -R www-data:www-data $WEBROOT/tmp
 
@@ -56,4 +56,3 @@ ln -s $WEBROOT/webroot/img $WEBROOT/webroot/images
 
 cp -TdR $SRC/cakephp.overlay $WEBROOT
 rm -rf $SRC/cakephp.overlay
-
