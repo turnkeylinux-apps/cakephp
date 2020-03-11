@@ -18,7 +18,7 @@ chown -R www-data:www-data $WEBROOT/tmp
 CONF=$WEBROOT/config/app_local.php
 
 sed -i "\
-    s#\\('salt' => \\)'.*'#\\1'$(mcookie)'#; \
+    s#\\('salt' => \\).*#\\1'$(mcookie)'#; \
     /Datasources/,/^    \\],/{ \
         s#\\('username' => \\)'.*'#\\1'cakephp'#; \
         s#\\('database' => \\)'.*'#\\1'cakephp'#; \
