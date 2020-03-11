@@ -18,8 +18,8 @@ and on top of that:
      they **ARE NOT** configured to install automatically. See `CakePHP
      documentation`_ for upgrading.
 
-- Includes TurnKey Web Control panel with links to useful references,
-  relevant path information, and CakePHP checks (convenience).
+- Includes a turnkey php shim with links to useful references,
+  relevant path information.
 - SSL support out of the box.
 - `Adminer`_ administration frontend for MySQL (listening on port
   12322 - uses SSL).
@@ -36,5 +36,5 @@ Credentials *(passwords set at first boot)*
 
 .. _CakePHP: https://cakephp.org/
 .. _TurnKey Core: https://www.turnkeylinux.org/core
-.. _CakePHP documentation: https://book.cakephp.org/3.0/en/upgrade-tool.html
+.. _CakePHP documentation: https://book.cakephp.org/4/en/appendices/4-0-upgrade-guide.html
 .. _Adminer: https://www.adminer.org/
