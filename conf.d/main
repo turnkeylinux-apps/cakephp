@@ -15,11 +15,11 @@ chown -R root:root $WEBROOT
 chown -R www-data:www-data $WEBROOT/tmp
 
 # tweak configuration
-CONF=$WEBROOT/config/app.php
+CONF=$WEBROOT/config/app_local.php
 
 sed -i "\
-    s#\\('salt' => \\)'.\\+'#\\1'$(mcookie)'#; \
-    /Datasources/,/        \\],/{ \
+    s#\\('salt' => \\).*#\\1'$(mcookie)'#; \
+    /Datasources/,/^    \\],/{ \
         s#\\('username' => \\)'.*'#\\1'cakephp'#; \
         s#\\('database' => \\)'.*'#\\1'cakephp'#; \
         s#\\('password' => \\)'.*'#\\1'$DB_PASS'# \
@@ -27,6 +27,27 @@ sed -i "\
     /EmailTransport/,/    \\]/ \
         s#\\('className' => \\)'Mail'#\\1'Smtp'# \
 " $CONF
+sed -i "\
+	/Datasources/ { a\
+\        'debug_kit' => [\n\
+            'className' => 'Cake\\\\Database\\\\Connection',\n\
+            'driver' => 'Cake\\\\Database\\\\Driver\\\\Mysql',\n\
+            'persistent' => false,\n\
+            'host' => 'localhost',\n\
+            'port' => '3306',\n\
+            'database' => 'cakephp',\n\
+            'username' => 'cakephp',\n\
+            'password' => '$DB_PASS',\n\
+            'timezone' => 'UTC',\n\
+            'flags' => [],\n\
+            'log' => false,\n\
+        ],\n\
+
+	};" $CONF
+sed -i "/DebugKit/,/<hr>/ {
+    /<hr>/a\
+            <?php include 'turnkey-shim.php' ?>
+    };" /var/www/cakephp/templates/Pages/home.php
 
 chown www-data:www-data $CONF
 chmod 640 $CONF
@@ -46,13 +67,3 @@ service mysql stop
 a2dissite 000-default
 a2ensite cakephp
 a2enmod rewrite
-
-# setup tkl-webcp
-mv /var/www/js/* $WEBROOT/webroot/js/; rm -rf /var/www/js
-mv /var/www/css/* $WEBROOT/webroot/css/; rm -rf /var/www/css
-mv /var/www/images/* $WEBROOT/webroot/img/; rm -rf /var/www/images
-
-ln -s $WEBROOT/webroot/img $WEBROOT/webroot/images
-
-cp -TdR $SRC/cakephp.overlay $WEBROOT
-rm -rf $SRC/cakephp.overlay
