@@ -1,3 +1,22 @@
+turnkey-cakephp-16.1 (1) turnkey; urgency=low
+
+  * Latest upstream version of CakePHP - v4.2.4.
+
+  * Include 'turnkey-composer' wrapper script - runs composer as www-data
+    user. Makes it easy to not run composer as root - part of #1539. Note by
+    default, /var/www/cakephp is still owned by root. To get full value of
+    'turnkey-composer'::
+
+        chown -R www-data:www-data /var/www/cakephp
+
+  * Explicitly install composer (rather than automatically include in all LAMP
+    based appliances) - part of #1563.
+
+  * Note: Please refer to turnkey-core's 16.1 changelog for changes common to
+    all appliances. Here we only describe changes specific to this appliance.
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Tue, 30 Mar 2021 12:52:37 +1100
+
 turnkey-cakephp-16.0 (1) turnkey; urgency=low
 
   * Latest upstream version of CakePHP - v4.0.7.
