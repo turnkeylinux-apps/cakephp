@@ -1,3 +1,16 @@
+turnkey-cakephp-17.0 (1) turnkey; urgency=low
+
+  * Latest upstream versiion of CakePHP - v4.3.6.
+
+  * Includes PHP 8.1 from Sury repos.
+
+  * Updated all relevant Debian packages to Bullseye/11 versions
+
+  * Note: Please refer to turnkey-core's 17.0 changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Stefan Davis <stefan@turnkeylinux.org>  Mon, 21 Mar 2022 23:23:58 +0000
+
 turnkey-cakephp-16.1 (1) turnkey; urgency=low
 
   * Latest upstream version of CakePHP - v4.2.4.
