@@ -16,11 +16,11 @@
     <pre> /var/www/cakephp/config/app_local.php</pre>
 <br>
     <h4>Also comes with the usual turnkey shipped tools:</h4>
-    <a href="https://<?php print $_SERVER{'HTTP_HOST'}; ?>:12320">Web Shell</a>
+    <a href="https://<?php print $_SERVER['HTTP_HOST']; ?>:12320">Web Shell</a>
 <br>
-    <a href="https://<?php print $_SERVER{'HTTP_HOST'}; ?>:12320">Webmin</a>
+    <a href="https://<?php print $_SERVER['HTTP_HOST']; ?>:12320">Webmin</a>
 <br>
-    <a href="https://<?php print $_SERVER{'HTTP_HOST'}; ?>:12320">Adminer</a>
+    <a href="https://<?php print $_SERVER['HTTP_HOST']; ?>:12320">Adminer</a>
 <br>
 <br>
     <h4>See also</h4>
