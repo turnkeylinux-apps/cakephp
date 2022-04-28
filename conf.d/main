@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
 
 DB_NAME=cakephp
 DB_USER=cakephp
@@ -13,6 +13,12 @@ unzip -d $WEBROOT $SRC/cakephp*.zip
 rm $SRC/cakephp*.zip
 chown -R root:root $WEBROOT
 chown -R www-data:www-data $WEBROOT/tmp
+
+# put landing page images in place
+for img in adminer.png shell.png webmin.png; do
+    mv /var/www/images/$img  $WEBROOT/webroot/img/
+done
+rm -r /var/www/{css,images,js}
 
 # tweak configuration
 CONF=$WEBROOT/config/app_local.php
