@@ -15,7 +15,7 @@ chown -R root:root $WEBROOT
 chown -R www-data:www-data $WEBROOT/tmp
 
 # put landing page images in place
-for img in adminer.png shell.png webmin.png; do
+for img in adminer.png webmin.png; do
     mv /var/www/images/$img  $WEBROOT/webroot/img/
 done
 rm -r /var/www/{css,images,js}

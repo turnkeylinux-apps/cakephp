@@ -17,9 +17,6 @@
     <h4>Also comes with the usual TurnKey shipped tools:</h4>
 <div class="row">
     <div class="column">
-        <a href="https://<?php print $_SERVER['HTTP_HOST']; ?>:12320">Web Shell</a>
-    </div>
-    <div class="column">
         &nbsp;
         <a href="https://<?php print $_SERVER['HTTP_HOST']; ?>:12321">Webmin</a>
     </div>
@@ -29,9 +26,6 @@
     </div>
 </div>
 <div class="row">
-    <div class="column">
-        <a href="https://<?php print $_SERVER['HTTP_HOST']; ?>:12320"><img src="img/shell.png" alt="Webshell"></a>
-    </div>
     <div class="column">
         <a href="https://<?php print $_SERVER['HTTP_HOST']; ?>:12321"><img src="img/webmin.png" alt="Webmin"></a>
     </div>
