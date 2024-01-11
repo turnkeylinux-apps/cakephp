@@ -55,6 +55,9 @@ sed -i "/DebugKit/,/<hr>/ {
             <?php include 'turnkey-shim.php' ?>
     };" /var/www/cakephp/templates/Pages/home.php
 
+# turn on assertions to avoid cakephp warning
+sed -i '/^zend\.assertions/ s|-1$|1|' /etc/php/8.?/{cli,apache2}/php.ini
+
 chown www-data:www-data $CONF
 chmod 640 $CONF
 
