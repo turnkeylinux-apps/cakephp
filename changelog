@@ -1,3 +1,14 @@
+turnkey-cakephp-18.0 (1) turnkey; urgency=low
+
+  * Latest upstream versiion of CakePHP - v5.0.4.
+
+  * Updated all relevant Debian packages to Bookworm/12 versions
+
+  * Note: Please refer to turnkey-core's 18.0 changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Anton Pyrogovskyi <anton@turnkeylinux.org>  Sat, 13 Jan 2024 16:08:47 +0100
+
 turnkey-cakephp-17.1 (1) turnkey; urgency=low
 
   * Updated all Debian packages to latest.
