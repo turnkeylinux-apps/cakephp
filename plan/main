@@ -1,11 +1,11 @@
 #include <turnkey/base>
-#include <turnkey/lamp81>
+#include <turnkey/lamp>
 
-php8.1-gd
-php8.1-curl
-php8.1-intl
-php8.1-mbstring
-php8.1-sqlite3
+php-gd
+php-curl
+php-intl
+php-mbstring
+php-sqlite3
 phpunit
 
 unzip
