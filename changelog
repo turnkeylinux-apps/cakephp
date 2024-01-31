@@ -1,7 +1,9 @@
 turnkey-cakephp-18.0 (1) turnkey; urgency=low
 
-  * Latest upstream versiion of CakePHP - v5.0.4.
+  * Latest upstream versiion of CakePHP - v5.0.5.
     [Anton Pyrogovskyi <anton@turnkeylinux.org>]
+
+  * Use Debian default PHP (v8.2).
 
   * Ensure hashfile includes URL to public key - closes #1864.
 
