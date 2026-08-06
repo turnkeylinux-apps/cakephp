@@ -13,7 +13,7 @@ sed -i "\|HOME_FALLBACK=|s|=.*|=/var/www/.composer|" /usr/local/bin/turnkey-comp
 sed -i "\|APP_ROOT_FALLBACK=|s|=.*|=$WEBROOT|" /usr/local/bin/turnkey-composer
 
 # install cakephp app skeleton for TKL example app
-turnkey-composer create-project --no-interaction --prefer-dist cakephp/app tkl-example
+turnkey-composer create-project --no-interaction --prefer-dist cakephp/app cakephp
 # return root ownership of /var/www
 chown root /var/www # note not recursive
 
