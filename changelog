@@ -1,6 +1,6 @@
 turnkey-cakephp-19.0 (1) turnkey; urgency=low
 
-  * Update CakePHP to latest upstream version.
+  * Update CakePHP to latest upstream version - v5.4.0.
 
   * Install CakePHP skeleton App via composer - closes #1591.
 

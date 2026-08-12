@@ -12,16 +12,17 @@ and on top of that:
 
 - CakePHP configurations:
    
-   - Installed from upstream source code to /var/www/cakephp
+    - `CakePHP skeleton app`_ installed to /var/www/cakephp using composer.
+    - Customized TurnKey CakePHP landing page with helpful info and links.
+    - Preconfigured MySQL (MariaDB) DB, DB user and CakePHP app DB connection.
+      (CakePHP DB user password randomized on firstboot).
 
      **Security note**: Updates to CakePHP may require supervision so
      they **ARE NOT** configured to install automatically. See `CakePHP
-     documentation`_ for upgrading.
+     migration/upgrade documentation`_ for details.
 
-- Includes a turnkey php shim with links to useful references,
-  relevant path information.
 - SSL support out of the box.
-- `Adminer`_ administration frontend for MySQL (listening on port
+- `Adminer`_ administration frontend for MySQL/MariaDB (listening on port
   12322 - uses SSL).
 - Postfix MTA (bound to localhost) to allow sending of email (e.g.,
   password recovery).
@@ -35,6 +36,7 @@ Credentials *(passwords set at first boot)*
 
 
 .. _CakePHP: https://cakephp.org/
+.. _CakePHP skeleton app: https://github.com/cakephp/app#cakephp-application-skeleton
 .. _TurnKey Core: https://www.turnkeylinux.org/core
-.. _CakePHP documentation: https://book.cakephp.org/4/en/appendices/4-0-upgrade-guide.html
+.. _CakePHP documentation: https://book.cakephp.org/5.x/appendices/migration-guides.html
 .. _Adminer: https://www.adminer.org/
