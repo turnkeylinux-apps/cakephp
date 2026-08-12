@@ -1,18 +1,53 @@
 #!/bin/bash -ex
 
-DB_NAME=cakephp
-DB_USER=cakephp
-DB_PASS=$(mcookie)
-
-SRC=/usr/local/src
 WEBROOT=/var/www/cakephp
 
-# unpack and set permissions
+# set up base dir permissions
 mkdir -p $WEBROOT
-unzip -d $WEBROOT $SRC/cakephp*.zip
-rm $SRC/cakephp*.zip
-chown -R root:root $WEBROOT
-chown -R www-data:www-data $WEBROOT/tmp
+chown -R www-data:www-data $WEBROOT
+# temporarily allow www-data write access to /var/www (only)
+chown www-data /var/www # note not recursive
+
+# set up turnkey-composer
+sed -i "\|HOME_FALLBACK=|s|=.*|=/var/www/.composer|" /usr/local/bin/turnkey-composer
+sed -i "\|APP_ROOT_FALLBACK=|s|=.*|=$WEBROOT|" /usr/local/bin/turnkey-composer
+
+# install cakephp app skeleton for TKL example app
+turnkey-composer create-project --no-interaction --prefer-dist cakephp/app cakephp
+# return root ownership of /var/www
+chown root /var/www # note not recursive
+
+# initial config
+CONF=$WEBROOT/config/app_local.php
+APP=cakephp
+# disable debugging
+sed -i "\|'DEBUG'|s|true|false|" $CONF
+
+## DB setup
+# CakePHP DB conf - 'my_app' is default DB and DB username - dirty but works...
+sed -i "s|my_app|$APP|" $CONF
+
+# Cake DB & user
+systemctl start mariadb
+mysqladmin create $APP
+mysql --batch --execute "CREATE USER '$APP'@'localhost' IDENTIFIED BY 'initial_pass';"
+mysql --batch --execute "GRANT ALL PRIVILEGES ON $APP.* TO '$APP'@'localhost';"
+mysql --batch --execute "FLUSH PRIVILEGES;"
+
+# use inithook to generate initial salt and set DB user password
+/usr/lib/inithooks/firstboot.d/20regen-cakephp-secrets
+
+# create default cakePHP DB tables
+$WEBROOT/bin/cake migrations migrate
+
+# send mail via local SMTP MTA (postfix)
+sed -Ei "\
+    /'EmailTransport'/,/'host' => 'localhost',/ \
+    s|^([[:blank:]]*)('host' => 'localhost',)|\1'className' => SmtpTransport::class,\n\1\2| \
+" $CONF
+
+## set up TurnKey landing page
+HOME=$WEBROOT/templates/Pages/home.php
 
 # put landing page images in place
 for img in adminer.png webmin.png; do
@@ -20,40 +55,15 @@ for img in adminer.png webmin.png; do
 done
 rm -r /var/www/{css,images,js}
 
-# tweak configuration
-CONF=$WEBROOT/config/app_local.php
+# allow page to show with debug disabled
+sed -i '\|!Configure::read|,+4 s|^|//|' $HOME
 
-sed -i "\
-    s#\\('salt' => \\).*#\\1'$(mcookie)'#; \
-    /Datasources/,/^    \\],/{ \
-        s#\\('username' => \\)'.*'#\\1'cakephp'#; \
-        s#\\('database' => \\)'.*'#\\1'cakephp'#; \
-        s#\\('password' => \\)'.*'#\\1'$DB_PASS'# \
-    }; \
-    /EmailTransport/,/    \\]/ \
-        s#\\('className' => \\)'Mail'#\\1'Smtp'# \
-" $CONF
-sed -i "\
-	/Datasources/ { a\
-\        'debug_kit' => [\n\
-            'className' => 'Cake\\\\Database\\\\Connection',\n\
-            'driver' => 'Cake\\\\Database\\\\Driver\\\\Mysql',\n\
-            'persistent' => false,\n\
-            'host' => 'localhost',\n\
-            'port' => '3306',\n\
-            'database' => 'cakephp',\n\
-            'username' => 'cakephp',\n\
-            'password' => '$DB_PASS',\n\
-            'timezone' => 'UTC',\n\
-            'flags' => [],\n\
-            'log' => false,\n\
-        ],\n\
+NEW_STR="Replace $HOME to see your own custom page here"
+sed -i "\|<small>|s|>.*</|>$NEW_STR</|" $HOME
 
-	};" $CONF
-sed -i "/DebugKit/,/<hr>/ {
-    /<hr>/a\
-            <?php include 'turnkey-shim.php' ?>
-    };" /var/www/cakephp/templates/Pages/home.php
+# insert custom TKL html (turnkey-shim.php in overlay)
+sed "\|<small>|{n;a\<?php include 'turnkey-shim.php' ?>
+}"
 
 # turn on assertions to avoid cakephp warning
 sed -i '/^zend\.assertions/ s|-1$|1|' /etc/php/8.?/{cli,apache2}/php.ini
@@ -61,13 +71,7 @@ sed -i '/^zend\.assertions/ s|-1$|1|' /etc/php/8.?/{cli,apache2}/php.ini
 chown www-data:www-data $CONF
 chmod 640 $CONF
 
-# setup the database
-service mysql start
-mysqladmin create $DB_NAME
-mysql --batch --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost identified by '$DB_PASS'; flush privileges;"
-service mysql stop
-
 # configure apache
 a2dissite 000-default
-a2ensite cakephp
+a2ensite tkl-cakephp
 a2enmod rewrite
