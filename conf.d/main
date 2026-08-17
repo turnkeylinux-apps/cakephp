@@ -1,21 +1,23 @@
 #!/bin/bash -ex
 
 WEBROOT=/var/www/cakephp
+# webroot dir created by cakephp composer install
 
-# set up base dir permissions
-mkdir -p $WEBROOT
-chown -R www-data:www-data $WEBROOT
 # temporarily allow www-data write access to /var/www (only)
 chown www-data /var/www # note not recursive
 
 # set up turnkey-composer
 sed -i "\|HOME_FALLBACK=|s|=.*|=/var/www/.composer|" /usr/local/bin/turnkey-composer
 sed -i "\|APP_ROOT_FALLBACK=|s|=.*|=$WEBROOT|" /usr/local/bin/turnkey-composer
+mkdir -p /var/www/.composer
+chown -R www-data /var/www/.composer
 
 # install cakephp app skeleton for TKL example app
-turnkey-composer create-project --no-interaction --prefer-dist cakephp/app cakephp
+APP_ROOT=/var/www turnkey-composer create-project --no-interaction --prefer-dist cakephp/app cakephp
 # return root ownership of /var/www
 chown root /var/www # note not recursive
+
+mv /var/www/turnkey-shim.php "$WEBROOT"/templates/Pages/
 
 # initial config
 CONF=$WEBROOT/config/app_local.php
@@ -62,8 +64,8 @@ NEW_STR="Replace $HOME to see your own custom page here"
 sed -i "\|<small>|s|>.*</|>$NEW_STR</|" $HOME
 
 # insert custom TKL html (turnkey-shim.php in overlay)
-sed "\|<small>|{n;a\<?php include 'turnkey-shim.php' ?>
-}"
+sed -i "\|<small>|{n;a\<?php include 'turnkey-shim.php' ?>
+}" $HOME
 
 # turn on assertions to avoid cakephp warning
 sed -i '/^zend\.assertions/ s|-1$|1|' /etc/php/8.?/{cli,apache2}/php.ini
@@ -73,5 +75,5 @@ chmod 640 $CONF
 
 # configure apache
 a2dissite 000-default
-a2ensite tkl-cakephp
+a2ensite cakephp
 a2enmod rewrite
