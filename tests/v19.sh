@@ -37,8 +37,7 @@ PY
 )
 [[ $cake_version == 5.4.* ]]
 test -s "$app/composer.lock"
-runuser --user=www-data -- "$app/bin/cake" migrations status \
-    --no-interaction >/dev/null
+runuser --user=www-data -- "$app/bin/cake" migrations status >/dev/null
 
 curl --insecure --fail --silent --show-error https://localhost/ >"$page"
 grep -Fq 'TurnKey CakePHP release notes' "$page"
