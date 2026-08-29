@@ -42,6 +42,7 @@ mysql --batch --execute "FLUSH PRIVILEGES;"
 /usr/lib/inithooks/firstboot.d/20regen-cakephp-secrets
 
 # create default cakePHP DB tables
+systemctl start mariadb
 runuser --user=www-data -- "$WEBROOT/bin/cake" migrations migrate
 
 # send mail via local SMTP MTA (postfix)
