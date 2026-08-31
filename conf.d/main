@@ -1,6 +1,7 @@
 #!/bin/bash -ex
 
 WEBROOT=/var/www/cakephp
+APP_VERSION=5.4.0
 # webroot dir created by cakephp composer install
 
 # temporarily allow www-data write access to /var/www (only)
@@ -13,7 +14,8 @@ mkdir -p /var/www/.composer
 chown -R www-data /var/www/.composer
 
 # install cakephp app skeleton for TKL example app
-APP_ROOT=/var/www turnkey-composer create-project --no-interaction --prefer-dist cakephp/app cakephp
+APP_ROOT=/var/www turnkey-composer create-project --no-interaction --prefer-dist \
+    "cakephp/app:$APP_VERSION" cakephp
 # return root ownership of /var/www
 chown root /var/www # note not recursive
 
@@ -40,7 +42,8 @@ mysql --batch --execute "FLUSH PRIVILEGES;"
 /usr/lib/inithooks/firstboot.d/20regen-cakephp-secrets
 
 # create default cakePHP DB tables
-$WEBROOT/bin/cake migrations migrate
+systemctl start mariadb
+runuser --user=www-data -- "$WEBROOT/bin/cake" migrations migrate
 
 # send mail via local SMTP MTA (postfix)
 sed -Ei "\
@@ -70,8 +73,11 @@ sed -i "\|<small>|{n;a\<?php include 'turnkey-shim.php' ?>
 # turn on assertions to avoid cakephp warning
 sed -i '/^zend\.assertions/ s|-1$|1|' /etc/php/8.?/{cli,apache2}/php.ini
 
-chown www-data:www-data $CONF
-chmod 640 $CONF
+# Application code and executable configuration must not be writable by the
+# web worker. CakePHP only needs write access to its runtime state directories.
+chown -R root:www-data "$WEBROOT"
+chown -R www-data:www-data "$WEBROOT"/logs "$WEBROOT"/tmp
+chmod 640 "$CONF"
 
 # configure apache
 a2dissite 000-default
